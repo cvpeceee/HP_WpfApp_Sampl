@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using UsbEventWatcher;
 using System.Windows;
+using System.Diagnostics;
 
 namespace HP_WpfApp_Sampl.ViewModels
 {
@@ -57,6 +58,7 @@ namespace HP_WpfApp_Sampl.ViewModels
 
         private void LoadDevices(object? sender, DeviceEventArgs e)
         {
+            Debug.WriteLine(e.Data);
             App.Current.Dispatcher.Invoke(() => USBDevices.Add(new USBDevice() { Device = e.Data }));
             
         }
