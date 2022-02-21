@@ -1,7 +1,8 @@
-﻿using HP_WpfApp_Sampl.Models;
-using HP_WpfApp_Sampl.Services.Interfaces;
+﻿using System;
+using HP_WpfApp_Sampl.Models;
 using System.Collections.Specialized;
 using System.Collections.ObjectModel;
+using UsbEventWatcher;
 
 namespace HP_WpfApp_Sampl.ViewModels
 {
@@ -9,16 +10,14 @@ namespace HP_WpfApp_Sampl.ViewModels
     {
         private USBDevice _usb;
         private ObservableCollection<USBDevice> _usbDevices;
-        
-        private IUSBService _usbService;
-        
-        public MainViewModel(IUSBService usbService)
+
+        private EventWatcherAsync eventWatcherAsync;
+
+        public MainViewModel()
         {
-            _usbService = usbService;
-            
             Initialize();
         }
-               
+
 
         public USBDevice USBDevice
         {
@@ -44,20 +43,28 @@ namespace HP_WpfApp_Sampl.ViewModels
                 NotifyPropertyChanged(nameof(USBDevices));
             }
         }
-        
+
 
         private void Initialize()
         {
             USBDevices = new ObservableCollection<USBDevice>();
             USBDevices.CollectionChanged += new NotifyCollectionChangedEventHandler(Device_Updated);
-            _usbService.LoadUSBDevices(ref _usbDevices);
-            
-            
+
+            eventWatcherAsync = new EventWatcherAsync();
+            eventWatcherAsync.OnEventArrived += LoadDevices;
+        }
+
+        private void LoadDevices(object? sender, DeviceEventArgs e)
+        {
+            System.Windows.Data.CollectionViewSource.GetDefaultView(USBDevices).Refresh();
+            USBDevices.Add(new USBDevice() { Device = e.Data });
         }
 
         private void Device_Updated(object? sender, NotifyCollectionChangedEventArgs e)
         {
             NotifyPropertyChanged(nameof(USBDevices));
         }
+
+
     }
 }

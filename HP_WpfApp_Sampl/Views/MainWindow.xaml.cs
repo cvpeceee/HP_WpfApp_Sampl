@@ -1,18 +1,5 @@
-﻿using HP_WpfApp_Sampl.Services;
-using HP_WpfApp_Sampl.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HP_WpfApp_Sampl.ViewModels;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace HP_WpfApp_Sampl.Views
 {
@@ -24,7 +11,7 @@ namespace HP_WpfApp_Sampl.Views
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel(Activator.CreateInstance<USBService>()); //ideally need to use DI on startup
+            DataContext = new MainViewModel();
         }
     }
 }
